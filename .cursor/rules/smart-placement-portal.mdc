@@ -1,0 +1,25 @@
+---
+description: Development rules and standards for Smart Placement Portal
+globs: **/*
+alwaysApply: true
+---
+
+# Smart Placement Portal — Agent Development Rules
+
+You are working on the greenfield rebuild of the Smart Placement Portal.
+
+### Mandatory Workflow:
+For EVERY feature or task, adhere strictly to:
+READ -> UNDERSTAND -> PLAN -> IMPLEMENT -> TEST -> REVIEW -> FIX -> COMMIT -> DOCUMENT
+
+### Critical Rules:
+1. **Never modify unrelated files.**
+2. **Never rewrite working modules unnecessarily.**
+3. **Follow docs/ARCHITECTURE.md:** Maintain clear boundaries between UI (`src/app`, `src/components`), Services (`src/services`), and Data Access (`src/lib/supabase`).
+4. **Follow docs/DESIGN.md:** Use the curated HSL color tokens, typography hierarchy, and spacing scale. Avoid arbitrary colors and unstyled raw components.
+5. **Follow docs/SECURITY.md:** All authorization (RBAC) and eligibility logic must run server-side. Zero trust in client claims.
+6. **No Mocking in Production Code:** Build real Supabase queries and authentic auth flows.
+7. **Strict State Handling:** Every view must support loading (skeletons), empty states (actionable prompts), and error states (graceful boundaries).
+8. **Small Vertical Slices:** Work strictly on the single approved TASK ID from `TASKS.md`. Never auto-proceed to subsequent tasks.
+9. **Responsive Design:** Verify layouts at 375px (mobile), 768px (tablet), and 1440px (desktop).
+10. **Never expose secrets:** Keep all private keys and credentials in server-only environments.

@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Smart Placement Assistant</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <style>
+        .badge-admin {
+            background: #FEF2F2;
+            color: #EF4444;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            border: 1px solid #FECACA;
+            text-transform: uppercase;
+        }
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+        .admin-table th {
+            text-align: left;
+            padding: 12px 14px;
+            background: #F8FAFC;
+            color: #64748B;
+            font-weight: 600;
+            border-bottom: 1px solid #E2E8F0;
+        }
+        .admin-table td {
+            padding: 14px;
+            border-bottom: 1px solid #F1F5F9;
+            vertical-align: middle;
+        }
+        .admin-table tr:hover {
+            background: #F8FAFC;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="dashboard">
+
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+        <div class="sidebar-brand">
+            <i class="fa-solid fa-graduation-cap brand-icon"></i>
+            <h2>Smart Placement</h2>
+        </div>
+
+        <ul class="sidebar-menu">
+            <li class="active">
+                <a href="admin-dashboard.html">
+                    <i class="fa-solid fa-chart-pie"></i>
+                    <span>Placement Overview</span>
+                </a>
+            </li>
+            <li>
+                <a href="jobs.html">
+                    <i class="fa-solid fa-briefcase"></i>
+                    <span>Manage Job Board</span>
+                </a>
+            </li>
+            <li>
+                <a href="dashboard.html">
+                    <i class="fa-solid fa-user-graduate"></i>
+                    <span>Student View</span>
+                </a>
+            </li>
+            <li>
+                <a href="company-dashboard.html">
+                    <i class="fa-solid fa-building"></i>
+                    <span>Recruiter View</span>
+                </a>
+            </li>
+            <li class="sidebar-divider"></li>
+            <li>
+                <a href="#" id="logoutBtn">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                    <span>Logout</span>
+                </a>
+            </li>
+        </ul>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+
+        <!-- Top Bar -->
+        <div class="topbar">
+            <div class="topbar-search">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" placeholder="Search students, companies, or metrics..." id="adminSearchInput">
+            </div>
+
+            <div class="top-icons">
+                <span class="badge-admin"><i class="fa-solid fa-shield-halved"></i> Admin Portal</span>
+
+                <!-- User Profile Badge -->
+                <div class="profile">
+                    <img src="assets/images/profile.png" alt="Profile" id="topAvatar">
+                    <div class="profile-meta">
+                        <span id="adminUserName">Placement Officer</span>
+                        <small class="role-caption">System Administrator</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Welcome Banner -->
+        <div class="welcome-banner" style="background: linear-gradient(135deg, #1E293B 0%, #0F172A 100%);">
+            <div>
+                <h1 id="welcomeAdmin" style="color: #FFFFFF;">Placement Cell Administration 🛡️</h1>
+                <p style="color: #94A3B8;">Campus-wide oversight of placement statistics, student profiles, and hiring partner recruitment.</p>
+            </div>
+            <a href="jobs.html" class="banner-action-btn" style="background: #2563EB;">
+                <i class="fa-solid fa-list"></i> Browse All Jobs
+            </a>
+        </div>
+
+        <!-- 4 Key Admin Performance Metrics -->
+        <div class="cards">
+            <div class="card stat-card">
+                <div class="stat-icon-wrap icon-blue">
+                    <i class="fa-solid fa-user-graduate"></i>
+                </div>
+                <div>
+                    <h3>Registered Students</h3>
+                    <h2 id="metricStudents">0</h2>
+                    <small>Active candidate profiles</small>
+                </div>
+            </div>
+
+            <div class="card stat-card">
+                <div class="stat-icon-wrap icon-green">
+                    <i class="fa-solid fa-building"></i>
+                </div>
+                <div>
+                    <h3>Company Partners</h3>
+                    <h2 id="metricCompanies">0</h2>
+                    <small>Verified hiring orgs</small>
+                </div>
+            </div>
+
+            <div class="card stat-card">
+                <div class="stat-icon-wrap icon-purple">
+                    <i class="fa-solid fa-briefcase"></i>
+                </div>
+                <div>
+                    <h3>Active Postings</h3>
+                    <h2 id="metricTotalJobs">0</h2>
+                    <small>Campus job openings</small>
+                </div>
+            </div>
+
+            <div class="card stat-card">
+                <div class="stat-icon-wrap icon-orange">
+                    <i class="fa-solid fa-trophy"></i>
+                </div>
+                <div>
+                    <h3>Placement Rate</h3>
+                    <h2 id="metricPlacementRate">0%</h2>
+                    <small>Average package: ₹7.2 LPA</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Registered Students Table Panel -->
+        <div class="panel-card" style="margin-top: 24px; background: white; border-radius: 14px; border: 1px solid #E2E8F0; padding: 24px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <div>
+                    <h2 style="font-size: 18px; font-weight: 700; color: #1E293B;"><i class="fa-solid fa-users" style="color:#2563EB;"></i> Student Directory</h2>
+                    <p style="color: #64748B; font-size: 13px;">Overview of registered students and academic credentials</p>
+                </div>
+            </div>
+
+            <div style="overflow-x: auto;">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Student Name</th>
+                            <th>Email</th>
+                            <th>College & Branch</th>
+                            <th>CGPA</th>
+                            <th>Key Skills</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="adminStudentsTbody">
+                        <tr>
+                            <td colspan="6" style="text-align: center; color: #94A3B8; padding: 30px;">
+                                <i class="fa-solid fa-spinner fa-spin"></i> Loading students...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </main>
+
+</div>
+
+<!-- Scripts -->
+<script src="js/api.js"></script>
+<script src="js/admin-dashboard.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard - Smart Placement Assistant</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+
+<body>
+
+<div class="dashboard">
+
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+        <div class="sidebar-brand">
+            <i class="fa-solid fa-graduation-cap brand-icon"></i>
+            <h2>Smart Placement</h2>
+        </div>
+
+        <ul class="sidebar-menu">
+            <li class="active">
+                <a href="dashboard.html">
+                    <i class="fa-solid fa-house"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li>
+                <a href="profile.html">
+                    <i class="fa-solid fa-user"></i>
+                    <span>My Profile</span>
+                </a>
+            </li>
+            <li>
+                <a href="resume.html">
+                    <i class="fa-solid fa-file-pdf"></i>
+                    <span>Resume Hub</span>
+                </a>
+            </li>
+            <li>
+                <a href="jobs.html">
+                    <i class="fa-solid fa-briefcase"></i>
+                    <span>Browse Jobs</span>
+                </a>
+            </li>
+            <li>
+                <a href="applications.html">
+                    <i class="fa-solid fa-paper-plane"></i>
+                    <span>My Applications</span>
+                </a>
+            </li>
+            <li>
+                <a href="ai-assistant.html">
+                    <i class="fa-solid fa-robot"></i>
+                    <span>AI Assistant</span>
+                </a>
+            </li>
+            <li class="sidebar-divider"></li>
+            <li>
+                <a href="#" id="logoutBtn">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                    <span>Logout</span>
+                </a>
+            </li>
+        </ul>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+
+        <!-- Top Bar -->
+        <div class="topbar">
+            <div class="topbar-search">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" placeholder="Search jobs, skills, or companies..." id="dashSearchInput">
+            </div>
+
+            <div class="top-icons">
+                <!-- Notification Bell & Dropdown -->
+                <div class="notification-wrap" id="notifWrap">
+                    <button type="button" class="icon-btn notif-btn" id="notifBtn" title="Notifications">
+                        <i class="fa-solid fa-bell"></i>
+                        <span class="notif-badge" id="notifBadge" style="display:none;">0</span>
+                    </button>
+                    <div class="notification-dropdown" id="notifDropdown" style="display:none;">
+                        <div class="notif-header">
+                            <h4>Notifications</h4>
+                            <button type="button" id="markAllReadBtn" class="text-btn">Mark all read</button>
+                        </div>
+                        <div class="notif-list" id="notifList">
+                            <p class="empty-notif">No new notifications.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- User Profile Badge -->
+                <div class="profile" onclick="window.location.href='profile.html'" style="cursor: pointer;" title="View Profile">
+                    <img src="assets/images/profile.png" alt="Profile" id="topAvatar">
+                    <div class="profile-meta">
+                        <span id="profileName">Student</span>
+                        <small class="role-caption" id="roleCaption">Candidate</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Welcome Banner -->
+        <div class="welcome-banner">
+            <div>
+                <h1 id="welcomeName">Welcome, Student 👋</h1>
+                <p>Track your placement applications, practice AI interviews, and get placed faster.</p>
+            </div>
+            <a href="jobs.html" class="banner-action-btn">
+                <i class="fa-solid fa-magnifying-glass"></i> Explore Jobs
+            </a>
+        </div>
+
+        <!-- 4 Key Performance Metrics -->
+        <div class="cards">
+            <div class="card stat-card" onclick="window.location.href='resume.html'">
+                <div class="stat-icon-wrap icon-blue">
+                    <i class="fa-solid fa-file-circle-check"></i>
+                </div>
+                <div>
+                    <h3>Resume Score</h3>
+                    <h2 id="resumeScoreText">--%</h2>
+                    <small id="resumeStatusNote">Click to review CV</small>
+                </div>
+            </div>
+
+            <div class="card stat-card" onclick="window.location.href='applications.html'">
+                <div class="stat-icon-wrap icon-green">
+                    <i class="fa-solid fa-paper-plane"></i>
+                </div>
+                <div>
+                    <h3>Applied Jobs</h3>
+                    <h2 id="appliedJobsCount">0</h2>
+                    <small>Track live status</small>
+                </div>
+            </div>
+
+            <div class="card stat-card" onclick="document.getElementById('interviewsSection').scrollIntoView({behavior: 'smooth'})">
+                <div class="stat-icon-wrap icon-purple">
+                    <i class="fa-solid fa-calendar-check"></i>
+                </div>
+                <div>
+                    <h3>Interviews</h3>
+                    <h2 id="interviewsCount">0</h2>
+                    <small>Upcoming sessions</small>
+                </div>
+            </div>
+
+            <div class="card stat-card" onclick="window.location.href='profile.html'">
+                <div class="stat-icon-wrap icon-amber">
+                    <i class="fa-solid fa-chart-pie"></i>
+                </div>
+                <div>
+                    <h3>Profile Strength</h3>
+                    <h2 id="profilePercentText">0%</h2>
+                    <small id="profileTipText">Optimize profile</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content Grid: Recommended Jobs & Interviews -->
+        <div class="dashboard-grid-2">
+
+            <!-- Recommended Jobs -->
+            <div class="dashboard-panel">
+                <div class="panel-header">
+                    <h3><i class="fa-solid fa-star"></i> Recommended Opportunities</h3>
+                    <a href="jobs.html" class="view-all-link">View All <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+                <div id="recommendedJobsList" class="panel-list">
+                    <div class="loading-placeholder">
+                        <i class="fa-solid fa-spinner fa-spin"></i> Loading jobs...
+                    </div>
+                </div>
+            </div>
+
+            <!-- Upcoming Interviews & Calendar -->
+            <div class="dashboard-panel" id="interviewsSection">
+                <div class="panel-header">
+                    <h3><i class="fa-solid fa-video"></i> Upcoming Interviews</h3>
+                    <span class="live-pill"><i class="fa-solid fa-circle"></i> Live Schedule</span>
+                </div>
+                <div id="interviewsList" class="panel-list">
+                    <div class="loading-placeholder">
+                        <i class="fa-solid fa-spinner fa-spin"></i> Loading interviews...
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Recent Applications Table Section -->
+        <div class="dashboard-panel full-panel">
+            <div class="panel-header">
+                <h3><i class="fa-solid fa-clock-rotate-left"></i> Recent Applications Timeline</h3>
+                <a href="applications.html" class="view-all-link">Track All <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+            <div id="recentApplicationsTable" class="table-responsive">
+                <div class="loading-placeholder">
+                    <i class="fa-solid fa-spinner fa-spin"></i> Loading application status...
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+</div>
+
+<!-- Scripts -->
+<script src="js/api.js"></script>
+<script src="js/dashboard.js"></script>
+
+</body>
+</html>
+

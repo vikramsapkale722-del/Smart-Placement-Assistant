@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Placement Jobs - Smart Placement Assistant</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/jobs.css">
+</head>
+
+<body>
+
+    <!-- Header Navigation -->
+    <header class="jobs-header">
+        <nav class="jobs-navbar">
+            <div class="logo">
+                <h2><i class="fa-solid fa-graduation-cap"></i> Smart Placement</h2>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="resume.html">Resume</a></li>
+                <li><a href="profile.html">Profile</a></li>
+            </ul>
+            <div class="header-right">
+                <span id="userGreeting" class="user-greeting"></span>
+                <a href="dashboard.html" class="dashboard-btn">My Dashboard</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero / Filter Section -->
+    <section class="jobs-hero">
+        <div class="hero-content">
+            <h1>Explore Placement & Internship Opportunities</h1>
+            <p>Verified openings from top campus recruiters and tech companies.</p>
+
+            <div class="search-bar-wrap">
+                <div class="search-input-group">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="jobSearchInput" placeholder="Search by role, company, or skill (e.g. Java, React)...">
+                </div>
+                <div class="filter-group">
+                    <button class="filter-btn active" data-filter="all">All Jobs</button>
+                    <button class="filter-btn" data-filter="Full-Time">Full-Time</button>
+                    <button class="filter-btn" data-filter="Internship">Internships</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Jobs Listing Container -->
+    <main class="jobs-container">
+        <div class="jobs-header-meta">
+            <h2 id="jobsCountText">Available Openings</h2>
+            <span class="live-badge"><i class="fa-solid fa-circle"></i> Live Openings</span>
+        </div>
+
+        <div id="jobsList" class="jobs-grid">
+            <div class="loading-spinner">
+                <i class="fa-solid fa-spinner fa-spin"></i>
+                <p>Loading active placement opportunities...</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Application Modal -->
+    <div id="applyModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <div class="modal-header">
+                <i class="fa-solid fa-circle-check modal-icon"></i>
+                <h3 id="modalJobTitle">Apply for Position</h3>
+                <p id="modalCompany"></p>
+            </div>
+            <div class="modal-body">
+                <p>Your profile and uploaded resume will be submitted to the recruiting team.</p>
+                <div class="modal-user-info" id="modalUserInfo">
+                    <!-- Populated dynamically -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="confirmApplyBtn" class="confirm-btn">Confirm Application</button>
+                <button id="cancelApplyBtn" class="cancel-btn">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="js/api.js"></script>
+    <script src="js/jobs.js"></script>
+</body>
+
+</html>

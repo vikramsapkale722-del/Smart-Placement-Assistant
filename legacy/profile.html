@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Profile - Smart Placement Assistant</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link rel="stylesheet" href="css/profile.css">
+</head>
+
+<body>
+
+<div class="profile-page-wrapper">
+
+    <div class="profile-card">
+
+        <div class="profile-top-nav">
+            <a href="dashboard.html" class="back-link">
+                <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
+            </a>
+            <span class="profile-role-badge" id="roleBadge">Student</span>
+        </div>
+
+        <div class="profile-header-banner">
+            <div class="profile-image-wrap">
+                <img
+                    src="assets/images/profile.png"
+                    alt="Profile"
+                    class="profile-image"
+                    id="profileAvatar">
+            </div>
+            <h2 id="fullName">Loading...</h2>
+            <p id="profileCollege" class="college-subtext">Placement Candidate</p>
+
+            <!-- Dynamic Profile Completion Meter -->
+            <div class="completion-meter-box">
+                <div class="completion-header">
+                    <span><i class="fa-solid fa-chart-pie"></i> Profile Strength</span>
+                    <strong id="completionPercentText">0%</strong>
+                </div>
+                <div class="completion-progress-track">
+                    <div id="completionProgressBar" class="completion-progress-fill" style="width: 0%;"></div>
+                </div>
+                <p id="completionTip" class="completion-tip">Complete your academic and project details to attract recruiters.</p>
+            </div>
+        </div>
+
+        <!-- Read-only View -->
+        <div id="profileViewWrap">
+            <div class="profile-info-grid">
+
+                <!-- Academic Info Card -->
+                <div class="info-section-card">
+                    <h3><i class="fa-solid fa-graduation-cap"></i> Academic Details</h3>
+                    <div class="detail-row">
+                        <span class="detail-label">College:</span>
+                        <span class="detail-val" id="viewCollege">Not added</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Degree & Branch:</span>
+                        <span class="detail-val" id="viewDegreeBranch">Not added</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Graduation Year:</span>
+                        <span class="detail-val" id="viewGradYear">Not added</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">CGPA / Percentage:</span>
+                        <span class="detail-val" id="viewCgpa">Not added</span>
+                    </div>
+                </div>
+
+                <!-- Contact & Social Card -->
+                <div class="info-section-card">
+                    <h3><i class="fa-solid fa-address-book"></i> Contact & Links</h3>
+                    <div class="detail-row">
+                        <span class="detail-label">Email:</span>
+                        <span class="detail-val" id="email">Loading...</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Phone:</span>
+                        <span class="detail-val" id="phone">Not added</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">LinkedIn:</span>
+                        <span class="detail-val" id="viewLinkedin">Not linked</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">GitHub:</span>
+                        <span class="detail-val" id="viewGithub">Not linked</span>
+                    </div>
+                </div>
+
+                <!-- Skills & Highlights -->
+                <div class="info-section-card full-width">
+                    <h3><i class="fa-solid fa-code"></i> Skills & Expertise</h3>
+                    <div id="skillsChipsWrap" class="skills-chips-container">
+                        <span class="no-data-text">No skills added yet.</span>
+                    </div>
+                </div>
+
+                <div class="info-section-card full-width">
+                    <h3><i class="fa-solid fa-laptop-code"></i> Projects & Experience</h3>
+                    <div class="detail-block">
+                        <strong>Projects:</strong>
+                        <p id="viewProjects" class="block-text">No projects listed.</p>
+                    </div>
+                    <div class="detail-block">
+                        <strong>Certifications:</strong>
+                        <p id="viewCertifications" class="block-text">No certifications listed.</p>
+                    </div>
+                    <div class="detail-block">
+                        <strong>Work / Internships:</strong>
+                        <p id="viewExperience" class="block-text">No prior experience listed.</p>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="profile-actions">
+                <button id="editBtn" class="btn-primary">
+                    <i class="fa-solid fa-pen-to-square"></i> Edit Full Profile
+                </button>
+                <a href="resume.html" class="btn-secondary">
+                    <i class="fa-solid fa-file-pdf"></i> Resume Hub
+                </a>
+            </div>
+        </div>
+
+        <!-- Edit Profile Form -->
+        <div id="editFormWrap" class="edit-form-wrap" style="display:none;">
+            <h3 class="edit-form-title"><i class="fa-solid fa-pen-to-square"></i> Update Placement Profile</h3>
+            
+            <form id="editProfileForm">
+                
+                <h4 class="form-section-subtitle">Basic Information</h4>
+                <div class="form-grid-2">
+                    <div class="edit-input-group">
+                        <label for="editFullName"><i class="fa-solid fa-user"></i> Full Name</label>
+                        <input type="text" id="editFullName" placeholder="Enter your full name" required>
+                    </div>
+                    <div class="edit-input-group">
+                        <label for="editPhone"><i class="fa-solid fa-phone"></i> Phone Number</label>
+                        <input type="tel" id="editPhone" placeholder="e.g. +91 98765 43210">
+                    </div>
+                </div>
+
+                <h4 class="form-section-subtitle">Academic Details</h4>
+                <div class="edit-input-group">
+                    <label for="editCollege"><i class="fa-solid fa-building-columns"></i> College / University</label>
+                    <input type="text" id="editCollege" placeholder="e.g. Government Engineering College">
+                </div>
+                <div class="form-grid-3">
+                    <div class="edit-input-group">
+                        <label for="editDegree"><i class="fa-solid fa-graduation-cap"></i> Degree</label>
+                        <input type="text" id="editDegree" placeholder="e.g. B.Tech">
+                    </div>
+                    <div class="edit-input-group">
+                        <label for="editBranch"><i class="fa-solid fa-code-branch"></i> Branch</label>
+                        <input type="text" id="editBranch" placeholder="e.g. Computer Engineering">
+                    </div>
+                    <div class="edit-input-group">
+                        <label for="editGradYear"><i class="fa-solid fa-calendar"></i> Grad Year</label>
+                        <input type="text" id="editGradYear" placeholder="e.g. 2026">
+                    </div>
+                </div>
+                <div class="edit-input-group">
+                    <label for="editCgpa"><i class="fa-solid fa-star"></i> CGPA / Score</label>
+                    <input type="text" id="editCgpa" placeholder="e.g. 8.85 / 10">
+                </div>
+
+                <h4 class="form-section-subtitle">Technical Skills & Projects</h4>
+                <div class="edit-input-group">
+                    <label for="editSkills"><i class="fa-solid fa-tags"></i> Skills (Comma Separated)</label>
+                    <input type="text" id="editSkills" placeholder="e.g. Java, Python, React, Node.js, SQL, Git">
+                </div>
+                <div class="edit-input-group">
+                    <label for="editProjects"><i class="fa-solid fa-diagram-project"></i> Key Projects</label>
+                    <textarea id="editProjects" rows="3" placeholder="Briefly describe 1-2 major technical projects and tools used..."></textarea>
+                </div>
+                <div class="edit-input-group">
+                    <label for="editCertifications"><i class="fa-solid fa-certificate"></i> Certifications</label>
+                    <input type="text" id="editCertifications" placeholder="e.g. AWS Certified Cloud Practitioner, Oracle Java">
+                </div>
+                <div class="edit-input-group">
+                    <label for="editExperience"><i class="fa-solid fa-briefcase"></i> Experience / Internships</label>
+                    <input type="text" id="editExperience" placeholder="e.g. Frontend Intern at TechCorp (3 months)">
+                </div>
+
+                <h4 class="form-section-subtitle">Social & Portfolio Links</h4>
+                <div class="form-grid-2">
+                    <div class="edit-input-group">
+                        <label for="editLinkedin"><i class="fa-brands fa-linkedin"></i> LinkedIn URL</label>
+                        <input type="url" id="editLinkedin" placeholder="https://linkedin.com/in/username">
+                    </div>
+                    <div class="edit-input-group">
+                        <label for="editGithub"><i class="fa-brands fa-github"></i> GitHub URL</label>
+                        <input type="url" id="editGithub" placeholder="https://github.com/username">
+                    </div>
+                </div>
+
+                <div class="edit-form-actions">
+                    <button type="submit" class="btn-primary" id="saveProfileBtn">
+                        <i class="fa-solid fa-floppy-disk"></i> Save Profile
+                    </button>
+                    <button type="button" class="btn-secondary" id="cancelEditBtn">
+                        Cancel
+                    </button>
+                </div>
+            </form>
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Scripts -->
+<script src="js/api.js"></script>
+<script src="js/profile.js"></script>
+
+</body>
+
+</html>

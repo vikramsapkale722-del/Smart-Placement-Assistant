@@ -1,0 +1,65 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 210 20% 98%;
+    --surface: 0 0% 100%;
+    --surface-hover: 210 20% 96%;
+    --border: 214 32% 91%;
+    --text-primary: 222 47% 11%;
+    --text-muted: 215 16% 47%;
+    
+    --primary: 221 83% 53%;
+    --primary-foreground: 210 40% 98%;
+
+    --success: 142 71% 45%;
+    --success-bg: 143 85% 96%;
+
+    --warning: 38 92% 50%;
+    --warning-bg: 48 100% 96%;
+
+    --error: 0 84% 60%;
+    --error-bg: 0 93% 97%;
+
+    --info: 199 89% 48%;
+    --info-bg: 204 94% 94%;
+  }
+
+  .dark {
+    --background: 222 47% 7%;
+    --surface: 222 47% 10%;
+    --surface-hover: 222 47% 13%;
+    --border: 217 33% 17%;
+    --text-primary: 210 40% 98%;
+    --text-muted: 215 20% 65%;
+
+    --primary: 217 91% 60%;
+    --primary-foreground: 222 47% 11%;
+
+    --success: 142 71% 45%;
+    --success-bg: 143 60% 12%;
+
+    --warning: 38 92% 50%;
+    --warning-bg: 48 60% 12%;
+
+    --error: 0 72% 51%;
+    --error-bg: 0 50% 12%;
+
+    --info: 199 89% 48%;
+    --info-bg: 204 60% 12%;
+  }
+
+  * {
+    border-color: hsl(var(--border));
+  }
+
+  body {
+    background-color: hsl(var(--background));
+    color: hsl(var(--text-primary));
+    font-feature-settings: "rlig" 1, "calt" 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}

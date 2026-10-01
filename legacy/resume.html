@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Hub - Smart Placement Assistant</title>
+
+    <!-- Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link rel="stylesheet" href="css/resume.css">
+</head>
+
+<body>
+
+<div class="resume-container">
+
+    <div class="resume-card">
+
+        <div class="resume-top-nav">
+            <a href="dashboard.html" class="back-link">
+                <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
+            </a>
+            <span class="hub-badge"><i class="fa-solid fa-shield-halved"></i> ATS Verified</span>
+        </div>
+
+        <div class="resume-header">
+            <i class="fa-solid fa-file-pdf resume-icon"></i>
+            <h2>Placement Resume Hub</h2>
+            <p>Upload your latest CV in PDF format (Max 5MB) for campus placement drives.</p>
+        </div>
+
+        <!-- Current Resume Status Card -->
+        <div id="currentResumeStatus" class="current-resume-box" style="display:none;">
+            <div class="current-resume-info-top">
+                <i class="fa-solid fa-circle-check current-resume-icon"></i>
+                <div class="resume-meta-details">
+                    <p class="current-resume-label">Active Campus Resume</p>
+                    <p id="currentFileName" class="current-resume-name">&mdash;</p>
+                    <p id="currentUploadDate" class="current-resume-date">&mdash;</p>
+                </div>
+                <div id="atsScoreBadge" class="ats-score-pill">
+                    <span class="ats-label">ATS Score</span>
+                    <strong id="atsScoreValue">85%</strong>
+                </div>
+            </div>
+
+            <!-- Skills Detected from Resume -->
+            <div id="resumeSkillsWrap" class="resume-skills-section">
+                <span class="section-micro-label">Detected Skills:</span>
+                <div id="resumeSkillsList" class="detected-skills-chips">
+                    <!-- Chips inserted dynamically -->
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="resume-action-buttons">
+                <a id="directViewBtn" href="#" target="_blank" class="action-btn view-btn" title="View in browser">
+                    <i class="fa-solid fa-eye"></i> View
+                </a>
+                <button id="downloadResumeBtn" type="button" class="action-btn download-btn" title="Download file">
+                    <i class="fa-solid fa-download"></i> Download
+                </button>
+                <button id="deleteResumeBtn" type="button" class="action-btn delete-btn" title="Delete resume">
+                    <i class="fa-solid fa-trash-can"></i> Delete
+                </button>
+            </div>
+        </div>
+
+        <!-- No Resume Notice -->
+        <div id="noResumeMsg" class="no-resume-msg" style="display:none;">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            <span>No resume uploaded yet. Please select your PDF resume below.</span>
+        </div>
+
+        <!-- Upload Form -->
+        <form id="resumeForm" class="upload-form-box">
+            <label for="resumeFile" class="file-drop-area" id="fileDropArea">
+                <i class="fa-solid fa-cloud-arrow-up drop-icon"></i>
+                <span class="drop-text" id="dropText">Click to select PDF or drag & drop</span>
+                <span class="drop-hint">Only .pdf documents up to 5MB</span>
+                <input
+                    type="file"
+                    id="resumeFile"
+                    accept=".pdf,application/pdf"
+                    required>
+            </label>
+
+            <button type="submit" class="submit-upload-btn" id="uploadSubmitBtn">
+                <i class="fa-solid fa-arrow-up-from-bracket"></i> Upload / Replace Resume
+            </button>
+        </form>
+
+        <!-- AI Resume Suggestions Box -->
+        <div id="aiSuggestionsBox" class="ai-suggestions-box" style="display:none;">
+            <h4><i class="fa-solid fa-wand-magic-sparkles"></i> AI Resume Feedback</h4>
+            <ul id="aiSuggestionsList" class="ai-suggestions-list">
+                <!-- Populated dynamically -->
+            </ul>
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Scripts -->
+<script src="js/api.js"></script>
+<script src="js/resume.js"></script>
+
+</body>
+</html>

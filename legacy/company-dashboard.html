@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recruiter Dashboard - Smart Placement Assistant</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <style>
+        .badge-recruiter {
+            background: #EFF6FF;
+            color: #2563EB;
+            font-weight: 600;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            border: 1px solid #BFDBFE;
+            text-transform: uppercase;
+        }
+        .jobs-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+        .jobs-table th {
+            text-align: left;
+            padding: 12px 14px;
+            background: #F8FAFC;
+            color: #64748B;
+            font-weight: 600;
+            border-bottom: 1px solid #E2E8F0;
+        }
+        .jobs-table td {
+            padding: 14px;
+            border-bottom: 1px solid #F1F5F9;
+            vertical-align: middle;
+        }
+        .jobs-table tr:hover {
+            background: #F8FAFC;
+        }
+        .table-action-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-size: 13px;
+            transition: all 0.2s;
+        }
+        .table-action-btn.btn-delete {
+            color: #EF4444;
+            background: #FEF2F2;
+        }
+        .table-action-btn.btn-delete:hover {
+            background: #FEE2E2;
+        }
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(4px);
+            z-index: 10000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .modal-box {
+            background: #FFFFFF;
+            width: 100%;
+            max-width: 600px;
+            border-radius: 14px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            animation: modalPop 0.25s ease;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+        }
+        @keyframes modalPop {
+            from { transform: scale(0.95); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        .modal-head {
+            padding: 20px 24px;
+            border-bottom: 1px solid #E2E8F0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .modal-head h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1E293B;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .modal-close-btn {
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: #94A3B8;
+            cursor: pointer;
+        }
+        .modal-body-scroll {
+            padding: 24px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .form-group label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #475569;
+        }
+        .form-group input, .form-group select, .form-group textarea {
+            padding: 10px 12px;
+            border: 1px solid #CBD5E1;
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            border-color: #2563EB;
+        }
+        .modal-footer-box {
+            padding: 16px 24px;
+            border-top: 1px solid #E2E8F0;
+            background: #F8FAFC;
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="dashboard">
+
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+        <div class="sidebar-brand">
+            <i class="fa-solid fa-graduation-cap brand-icon"></i>
+            <h2>Smart Placement</h2>
+        </div>
+
+        <ul class="sidebar-menu">
+            <li class="active">
+                <a href="company-dashboard.html">
+                    <i class="fa-solid fa-chart-line"></i>
+                    <span>Recruiter Overview</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" onclick="openPostJobModal(); return false;">
+                    <i class="fa-solid fa-circle-plus"></i>
+                    <span>Post New Opening</span>
+                </a>
+            </li>
+            <li>
+                <a href="jobs.html">
+                    <i class="fa-solid fa-briefcase"></i>
+                    <span>Public Job Board</span>
+                </a>
+            </li>
+            <li class="sidebar-divider"></li>
+            <li>
+                <a href="#" id="logoutBtn">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                    <span>Logout</span>
+                </a>
+            </li>
+        </ul>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+
+        <!-- Top Bar -->
+        <div class="topbar">
+            <div class="topbar-search">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" placeholder="Search postings or candidates..." id="recruiterSearchInput">
+            </div>
+
+            <div class="top-icons">
+                <span class="badge-recruiter"><i class="fa-solid fa-building"></i> Recruiter Portal</span>
+
+                <!-- User Profile Badge -->
+                <div class="profile">
+                    <img src="assets/images/profile.png" alt="Profile" id="topAvatar">
+                    <div class="profile-meta">
+                        <span id="companyUserName">Recruiter</span>
+                        <small class="role-caption" id="companyUserOrg">Hiring Partner</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Welcome Banner -->
+        <div class="welcome-banner">
+            <div>
+                <h1 id="welcomeCompany">Welcome, Hiring Partner 👋</h1>
+                <p>Post open positions, track applicants, and schedule campus interviews in real-time.</p>
+            </div>
+            <button type="button" class="banner-action-btn" onclick="openPostJobModal()">
+                <i class="fa-solid fa-plus"></i> Post New Job
+            </button>
+        </div>
+
+        <!-- 4 Recruiter Metrics -->
+        <div class="cards">
+            <div class="card stat-card">
+                <div class="stat-icon-wrap icon-blue">
+                    <i class="fa-solid fa-briefcase"></i>
+                </div>
+                <div>
+                    <h3>Active Postings</h3>
+                    <h2 id="metricActiveJobs">0</h2>
+                    <small>Open positions</small>
+                </div>
+            </div>
+
+            <div class="card stat-card">
+                <div class="stat-icon-wrap icon-green">
+                    <i class="fa-solid fa-users"></i>
+                </div>
+                <div>
+                    <h3>Total Applicants</h3>
+                    <h2 id="metricApplicants">0</h2>
+                    <small>Submitted resumes</small>
+                </div>
+            </div>
+
+            <div class="card stat-card">
+                <div class="stat-icon-wrap icon-purple">
+                    <i class="fa-solid fa-user-check"></i>
+                </div>
+                <div>
+                    <h3>Shortlisted</h3>
+                    <h2 id="metricShortlisted">0</h2>
+                    <small>Qualified for review</small>
+                </div>
+            </div>
+
+            <div class="card stat-card">
+                <div class="stat-icon-wrap icon-orange">
+                    <i class="fa-solid fa-calendar-check"></i>
+                </div>
+                <div>
+                    <h3>Interviews</h3>
+                    <h2 id="metricInterviews">0</h2>
+                    <small>Scheduled sessions</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content Grid: Manage Jobs & Candidates -->
+        <div class="panel-card" style="margin-top: 24px; background: white; border-radius: 14px; border: 1px solid #E2E8F0; padding: 24px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <div>
+                    <h2 style="font-size: 18px; font-weight: 700; color: #1E293B;"><i class="fa-solid fa-list-check" style="color:#2563EB;"></i> Your Job Postings</h2>
+                    <p style="color: #64748B; font-size: 13px;">Manage and monitor live roles posted by your company</p>
+                </div>
+                <button type="button" class="banner-action-btn" style="padding: 8px 16px; font-size: 13px;" onclick="openPostJobModal()">
+                    <i class="fa-solid fa-plus"></i> New Opening
+                </button>
+            </div>
+
+            <div style="overflow-x: auto;">
+                <table class="jobs-table">
+                    <thead>
+                        <tr>
+                            <th>Job Title</th>
+                            <th>Type</th>
+                            <th>Location</th>
+                            <th>Salary / Package</th>
+                            <th>Deadline</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="companyJobsTbody">
+                        <tr>
+                            <td colspan="7" style="text-align: center; color: #94A3B8; padding: 30px;">
+                                <i class="fa-solid fa-spinner fa-spin"></i> Loading company jobs...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </main>
+
+</div>
+
+<!-- Post Job Modal -->
+<div class="modal-overlay" id="postJobModal">
+    <div class="modal-box">
+        <div class="modal-head">
+            <h3><i class="fa-solid fa-briefcase" style="color: #2563EB;"></i> Create Job Opening</h3>
+            <button class="modal-close-btn" onclick="closePostJobModal()">&times;</button>
+        </div>
+        <form id="postJobForm">
+            <div class="modal-body-scroll">
+                <div class="form-group">
+                    <label>Job Title *</label>
+                    <input type="text" id="jobTitle" placeholder="e.g. Associate Software Engineer" required>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Employment Type</label>
+                        <select id="jobType">
+                            <option value="Full-Time">Full-Time</option>
+                            <option value="Internship">Internship</option>
+                            <option value="Part-Time">Part-Time</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Salary / Stipend</label>
+                        <input type="text" id="jobSalary" placeholder="e.g. ₹6.5 - ₹8.0 LPA">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Hiring Location</label>
+                        <input type="text" id="jobLocation" placeholder="e.g. Bengaluru / Pune / Remote">
+                    </div>
+                    <div class="form-group">
+                        <label>Experience Required</label>
+                        <input type="text" id="jobExperience" placeholder="e.g. Fresher (2025/2026)">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Required Skills (Comma separated)</label>
+                    <input type="text" id="jobSkills" placeholder="e.g. Java, Python, SQL, React">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Eligible Branches</label>
+                        <input type="text" id="jobBranch" placeholder="e.g. CSE, IT, Circuital">
+                    </div>
+                    <div class="form-group">
+                        <label>Application Deadline</label>
+                        <input type="date" id="jobDeadline">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Job Description & Responsibilities</label>
+                    <textarea id="jobDescription" rows="3" placeholder="Briefly describe the role, team, and expectations..."></textarea>
+                </div>
+            </div>
+
+            <div class="modal-footer-box">
+                <button type="button" class="table-action-btn" style="background:#E2E8F0; color:#475569;" onclick="closePostJobModal()">Cancel</button>
+                <button type="submit" class="banner-action-btn" id="saveJobBtn">
+                    <i class="fa-solid fa-check"></i> Publish Job
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Scripts -->
+<script src="js/api.js"></script>
+<script src="js/company-dashboard.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Smart Placement Assistant</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/login.css">
+</head>
+
+<body>
+
+    <div class="login-container">
+
+        <div class="login-box">
+
+            <div class="login-logo-header">
+                <i class="fa-solid fa-graduation-cap brand-icon"></i>
+                <h1>Smart Placement Assistant</h1>
+                <p>Welcome Back 👋 Sign in to continue</p>
+            </div>
+
+            <!-- One-Click Demo Logins -->
+            <div class="demo-logins-box">
+                <span class="demo-label"><i class="fa-solid fa-bolt"></i> Quick Demo Access:</span>
+                <div class="demo-btns-grid">
+                    <button type="button" class="demo-btn student-demo" onclick="fillDemo('student')">
+                        <i class="fa-solid fa-user-graduate"></i> Student
+                    </button>
+                    <button type="button" class="demo-btn company-demo" onclick="fillDemo('company')">
+                        <i class="fa-solid fa-building"></i> Recruiter
+                    </button>
+                    <button type="button" class="demo-btn admin-demo" onclick="fillDemo('admin')">
+                        <i class="fa-solid fa-shield-halved"></i> Admin
+                    </button>
+                </div>
+            </div>
+
+            <form id="loginForm">
+
+                <div class="input-box">
+                    <i class="fa-solid fa-envelope"></i>
+                    <input
+                        type="email"
+                        id="email"
+                        placeholder="Enter your Email"
+                        required>
+                </div>
+
+                <div class="input-box">
+                    <i class="fa-solid fa-lock"></i>
+                    <input
+                        type="password"
+                        id="password"
+                        placeholder="Enter Password"
+                        required>
+                </div>
+
+                <button type="submit" class="login-btn" id="loginSubmitBtn">
+                    <i class="fa-solid fa-right-to-bracket"></i> Login
+                </button>
+
+            </form>
+
+            <p class="register-link">
+                Don't have an account?
+                <a href="register.html">Register here</a>
+            </p>
+
+            <div class="back-home-wrap">
+                <a href="index.html"><i class="fa-solid fa-house"></i> Back to Homepage</a>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/api.js"></script>
+    <script src="js/login.js"></script>
+
+</body>
+
+</html>

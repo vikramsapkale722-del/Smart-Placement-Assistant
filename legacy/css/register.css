@@ -1,0 +1,198 @@
+/* ==========================================
+   REGISTER PAGE
+   Smart Placement Assistant
+========================================== */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:'Inter',sans-serif;
+    background:linear-gradient(135deg, #2563EB, #1E40AF);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:100vh;
+    padding: 30px 15px;
+}
+
+.register-container {
+    width: 100%;
+    max-width: 480px;
+}
+
+.register-box{
+    width: 100%;
+    background:#ffffff;
+    padding:35px 30px;
+    border-radius:18px;
+    box-shadow:0 15px 40px rgba(0,0,0,0.15);
+}
+
+.register-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.brand-icon {
+    font-size: 38px;
+    color: #2563EB;
+    margin-bottom: 8px;
+}
+
+.register-box h1{
+    text-align:center;
+    color:#0F172A;
+    margin-bottom:6px;
+    font-size:24px;
+    font-weight: 700;
+}
+
+.register-box p{
+    text-align:center;
+    color:#64748B;
+    margin-bottom:20px;
+    font-size: 14px;
+}
+
+/* Role Selector Tabs */
+.role-selector {
+    display: flex;
+    background: #F1F5F9;
+    border-radius: 10px;
+    padding: 4px;
+    margin-bottom: 20px;
+    gap: 4px;
+}
+
+.role-tab {
+    flex: 1;
+    padding: 10px 8px;
+    font-size: 13px;
+    font-weight: 600;
+    border-radius: 8px;
+    background: transparent;
+    color: #64748B;
+    border: none;
+    cursor: pointer;
+    transition: 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.role-tab.active {
+    background: #FFFFFF;
+    color: #2563EB;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.role-fields-wrap {
+    animation: fadeIn 0.25s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.input-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.input-box{
+    display:flex;
+    align-items:center;
+    border:1px solid #D1D5DB;
+    border-radius:10px;
+    padding:11px 14px;
+    margin-bottom:14px;
+    background: #fff;
+    transition: border-color 0.2s;
+}
+
+.input-box:focus-within {
+    border-color: #2563EB;
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+}
+
+.input-box i{
+    color:#2563EB;
+    margin-right:10px;
+    width: 16px;
+    text-align: center;
+}
+
+.input-box input{
+    width:100%;
+    border:none;
+    outline:none;
+    font-size:14px;
+    font-family:'Inter',sans-serif;
+    color: #1E293B;
+}
+
+.register-btn{
+    width:100%;
+    padding:13px;
+    background:#2563EB;
+    color:#ffffff;
+    border:none;
+    border-radius:10px;
+    font-size:16px;
+    font-weight:600;
+    cursor:pointer;
+    transition:0.3s;
+    margin-top:6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.register-btn:hover{
+    background:#1E40AF;
+}
+
+.register-link{
+    text-align:center;
+    margin-top:18px;
+    font-size:14px;
+    color:#64748B;
+}
+
+.register-link a{
+    color:#2563EB;
+    font-weight:600;
+    text-decoration:none;
+}
+
+.register-link a:hover{
+    text-decoration:underline;
+}
+
+.back-home-wrap {
+    text-align: center;
+    margin-top: 14px;
+}
+
+.back-home-wrap a {
+    font-size: 13px;
+    color: #64748B;
+    text-decoration: none;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: 0.2s;
+}
+
+.back-home-wrap a:hover {
+    color: #2563EB;
+}

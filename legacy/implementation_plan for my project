@@ -1,0 +1,313 @@
+# Smart Placement Assistant - Project Audit & Implementation Plan
+
+**Developer:** Vedant Patil  
+**Architectural Goal:** Turn the existing *Smart Placement Assistant* project into an enterprise-grade, full-stack, AI-powered placement management platform connecting **Students**, **Companies / Recruiters**, and **Placement Cell / Admin**.
+
+---
+
+## 1. Project Audit Report
+
+### 1.1 Existing Folder Structure
+```
+Smart-Placement-Assistant/
+├── assets/
+│   ├── images/ (hero.png, profile.png, logos, etc.)
+│   ├── icons/
+│   └── videos/
+├── backend/
+│   ├── .env (PORT, MONGODB_URI, JWT_SECRET, GEMINI_API_KEY)
+│   ├── config/
+│   │   └── db.js (Mongoose connection with Atlas)
+│   ├── controllers/
+│   │   ├── authController.js (register, login, getMe, updateProfile)
+│   │   └── jobController.js (getAllJobs, getJobById, createJob)
+│   ├── middleware/
+│   │   └── authMiddleware.js (protect JWT token verification)
+│   ├── models/
+│   │   ├── User.js (basic user schema)
+│   │   ├── Resume.js (userId, fileName, filePath, uploadedAt)
+│   │   └── Job.js (title, company, salary, type, skills, description)
+│   ├── routes/
+│   │   ├── authRoutes.js
+│   │   ├── jobRoutes.js
+│   │   └── resumeRoutes.js
+│   ├── uploads/ (uploaded student PDF resumes)
+│   └── server.js (Express server, CORS, /uploads static, error handling)
+├── css/
+│   ├── style.css, login.css, register.css, dashboard.css, profile.css, resume.css, jobs.css
+├── js/
+│   ├── script.js, login.js, register.js, dashboard.js, profile.js, resume.js, jobs.js
+├── docs/ (Version_History.txt)
+├── index.html (Landing page with hero, features, quick bot)
+├── login.html & register.html
+├── dashboard.html (Student dashboard)
+├── profile.html (Student basic profile)
+├── resume.html (Resume upload & view)
+├── jobs.html (Jobs list & filter)
+├── package.json & package-lock.json
+```
+
+### 1.2 Existing Pages
+1. `index.html`: Landing page with hero, features, and floating chatbot widget.
+2. `login.html`: Email/password login form.
+3. `register.html`: Full name, email, password registration form.
+4. `dashboard.html`: Student dashboard showing metric cards (Resume score 85%, Applied jobs count, AI interviews 7, progress 60%).
+5. `profile.html`: Displays name, email, role, phone with inline edit for name/phone.
+6. `resume.html`: Upload PDF form, status card, view resume button.
+7. `jobs.html`: Jobs list, keyword search, type filter pills, mock apply modal.
+
+### 1.3 Existing Backend Routes
+- `POST /api/auth/register`: Create user account & issue JWT.
+- `POST /api/auth/login`: Authenticate email/password & issue JWT.
+- `GET /api/auth/me`: Get current logged-in user profile.
+- `PUT /api/auth/profile`: Update basic profile fields (`fullName`, `phone`).
+- `GET /api/jobs`: List all jobs (with auto-seeding if empty).
+- `GET /api/jobs/:id`: Fetch single job.
+- `POST /api/jobs`: Create job (requires token).
+- `POST /api/resume/upload`: Upload PDF resume with Multer.
+- `GET /api/resume/myresume`: Get uploaded resume metadata for logged-in student.
+- `GET /uploads/:filename`: Static PDF file serving.
+
+### 1.4 Existing Models
+- `User`: `fullName`, `email`, `password`, `role` (student/company/admin), `phone`, `profileImage`.
+- `Resume`: `userId`, `fileName`, `filePath`, `uploadedAt`.
+- `Job`: `title`, `company`, `location`, `salary`, `type`, `experience`, `skills`, `description`, `applyUrl`.
+
+### 1.5 Existing Controllers
+- `authController.js`: Handles register, login, getMe, updateProfile.
+- `jobController.js`: Handles getAllJobs, getJobById, createJob.
+- Note: Resume logic is currently placed directly inside `resumeRoutes.js`.
+
+### 1.6 Existing Middleware
+- `authMiddleware.js`: `protect` verifies Bearer JWT token from Authorization header.
+
+### 1.7 Existing Working Features
+- User registration with bcrypt hashing and JWT generation.
+- User login and authentication check.
+- Basic profile viewing and name/phone update.
+- Multer PDF resume upload and persistence in `backend/uploads/`.
+- Job listing with search, category filtering, and fallback mock dataset when offline.
+- Landing page with responsive styling and basic client-side chat widget.
+
+### 1.8 Existing Broken Features & Bugs
+- **Job Applications are completely fake**: In `js/jobs.js`, clicking "Apply Now" only stores job IDs in browser `localStorage`. There is no `Application` model, no database record, and no way for recruiters or admins to view applicants.
+- **Saved Jobs is missing**: No database or UI feature for saving jobs for later.
+- **Resume cleanup missing**: When a user uploads a new resume, the old physical PDF file is never deleted from `backend/uploads/`, causing orphan files and disk bloat.
+- **Resume Download endpoint missing**: Resume only supports viewing directly via static URL; no dedicated download stream with proper `Content-Disposition`.
+- **Resume Delete endpoint missing**: No way for a student to delete an existing resume.
+- **Authorization missing**: Any authenticated user (including student) can send `POST /api/jobs` because there is no role authorization check (`authorize("company", "admin")`).
+- **Student Dashboard displays static mock numbers**: "85% Resume Score", "7 AI Interviews", "60% Placement Progress" are hardcoded.
+- **Student Profile is missing critical placement data**: Missing college, degree, branch, graduation year, CGPA, skills, projects, certifications, internships, GitHub, LinkedIn, portfolio, and dynamic profile completion calculation.
+- **Recruiter/Company Module is completely absent**: No company registration/login, no company dashboard, no candidate review, no application status progression, no interview scheduling.
+- **Admin/Placement Cell Module is completely absent**: No admin portal, no placement stats, no student/company management.
+- **AI features are superficial**: The landing chatbot only uses basic `if/else` checks for 4 words ("hello", "job", "resume"). There is no real AI Assistant, no resume analyzer, no interview prep engine.
+- **Notifications & Interviews are missing**: No models or routes for notifications or interview scheduling.
+- **Express does not serve frontend root**: `backend/server.js` only serves `/uploads`. The frontend files must be opened via Live Server or `file://`, and all API URLs are hardcoded to `http://localhost:5000`.
+
+### 1.9 Missing Features (Against Project Spec)
+1. Complete Role-Based Access Control (`student`, `company`, `admin`).
+2. Comprehensive Student Profile with dynamic completion percentage.
+3. Production Resume System: Download, Delete, Replace with disk file cleanup, file existence validation, and secure access.
+4. Real Application Management: Database persistence, applicant tracking, and status pipeline (`Applied` -> `Under Review` -> `Shortlisted` -> `Interview` -> `Selected` -> `Rejected`).
+5. Saved Jobs feature (Bookmark & manage saved jobs).
+6. Complete Company / Recruiter Portal: Company dashboard, job creation/editing/deletion, applicant list, resume viewing, status updates, interview scheduling.
+7. Complete Placement Cell / Admin Portal: Analytics, student directory, company directory, placement statistics.
+8. Integrated AI Assistant & Interview Prep: Technical, HR, Aptitude, Resume Improvement, and Career Guidance with Gemini API support + robust offline fallback knowledge engine.
+9. AI Resume Analyzer: Skill detection, missing skills, match score, ATS formatting feedback.
+10. Notification System: Live notifications for status changes, interview invites, new jobs.
+11. Unified Express Serving: Express serves both API and static frontend seamlessly with adaptive API base URL.
+
+---
+
+## 2. Proposed Changes & Architecture
+
+### Backend Architecture
+```
+backend/
+├── .env
+├── server.js (Serves frontend static, /uploads, all API routes, error handlers)
+├── config/
+│   └── db.js (MongoDB Atlas connection + resilience)
+├── middleware/
+│   ├── authMiddleware.js (protect + authorize roles)
+│   └── uploadMiddleware.js (Multer PDF validation)
+├── models/
+│   ├── User.js (Expanded student, company, and admin schema)
+│   ├── Resume.js (Metadata, file path, original name, parsed skills, score)
+│   ├── Job.js (Full job fields, companyId ref, eligibility, deadline, status)
+│   ├── Application.js (studentId, jobId, companyId, resumeId, status, notes)
+│   ├── SavedJob.js (studentId, jobId)
+│   ├── Notification.js (recipientId, role, title, message, type, isRead)
+│   └── Interview.js (applicationId, studentId, companyId, jobId, round, date, time, link, status)
+├── controllers/
+│   ├── authController.js (Register with role, Login, GetMe, UpdateProfile, Dynamic completion)
+│   ├── resumeController.js (Upload, Get, Download stream, Delete, Replace with cleanup, Analyze)
+│   ├── jobController.js (CRUD jobs, filters, sort, company-specific jobs)
+│   ├── applicationController.js (Apply, Get student applications, Get company applicants, Update status)
+│   ├── savedJobController.js (Toggle save, Get saved)
+│   ├── companyController.js (Company profile, Dashboard metrics, Recruiter jobs & applicants)
+│   ├── adminController.js (Admin analytics, Manage users, Manage jobs, Placement stats)
+│   ├── notificationController.js (Get user notifications, Mark read)
+│   ├── interviewController.js (Schedule, Update, List interviews)
+│   └── aiController.js (Chatbot, Interview practice questions, Resume analyzer)
+├── services/
+│   └── aiService.js (Gemini API integration with smart offline placement knowledge engine)
+└── routes/
+    ├── authRoutes.js
+    ├── resumeRoutes.js
+    ├── jobRoutes.js
+    ├── applicationRoutes.js
+    ├── savedJobRoutes.js
+    ├── companyRoutes.js
+    ├── adminRoutes.js
+    ├── notificationRoutes.js
+    ├── interviewRoutes.js
+    └── aiRoutes.js
+```
+
+### Frontend Architecture
+We retain and enhance all existing pages and add dedicated portals for Recruiter, Admin, Applications, and AI:
+- `index.html`: Enhance navigation, connect AI chat widget to real backend AI API.
+- `login.html`: Add role selection toggle (`Student` / `Recruiter` / `Admin`) or smart role detection after login.
+- `register.html`: Add role selector (`Student` or `Recruiter / Company`).
+- `dashboard.html`: Complete student dashboard with real dynamic stats (profile completion, real applied jobs count, real resume score, saved jobs, upcoming interviews, dynamic recommendations).
+- `profile.html`: Complete student profile editor with college, degree, branch, grad year, CGPA, skills tags, projects, experience, social links, and real-time profile completion meter.
+- `resume.html`: Production-ready resume hub with upload, view, direct download, delete, replace, and instant AI resume feedback.
+- `jobs.html`: Complete job portal with search, multi-filter (Type, Location, Skill), sorting (newest, salary), job details modal, and real backend "Apply" button.
+- `applications.html` [NEW]: Student portal to track applied jobs, application timeline, and status updates.
+- `company-dashboard.html` [NEW]: Recruiter portal to post jobs, view applicants, download candidate resumes, change candidate status, and schedule interviews.
+- `admin-dashboard.html` [NEW]: Placement Cell portal to monitor placement rates, top hiring companies, student directories, and system reports.
+- `ai-assistant.html` [NEW]: Dedicated AI Interview Preparation & Career Assistant (Technical mock questions, HR behavioral prep, Resume tips, Skill gap suggestions).
+- `js/api.js` [NEW]: Unified API client helper with dynamic `API_BASE_URL`, token handling, and error notifications.
+
+---
+
+## 3. Step-by-Step Implementation Roadmap
+
+### Phase 1: Audit, Architecture & Error Handling
+- Create unified `backend/server.js` that serves the root frontend static files and `/uploads`.
+- Ensure MongoDB Atlas connection handles offline/timeout gracefully without crashing.
+- Add `js/api.js` with centralized `API_BASE` and response handlers.
+
+### Phase 2: Authentication & Role-Based Authorization
+- Enhance `models/User.js` with comprehensive profile fields.
+- Update `backend/middleware/authMiddleware.js` to add `authorize(...roles)`.
+- Update `register.html` / `register.js` to allow registering as Student or Company/Recruiter.
+- Update `login.html` / `login.js` to redirect users to their appropriate dashboard:
+  - Student -> `dashboard.html`
+  - Company -> `company-dashboard.html`
+  - Admin -> `admin-dashboard.html`
+- Protect frontend pages from unauthorized role access.
+
+### Phase 3: Student Profile & Dynamic Dashboard
+- Upgrade `profile.html` and `js/profile.js` to support all academic and professional fields:
+  - Full Name, Phone, College, Degree, Branch, Graduation Year, CGPA, Skills, Projects, Experience, GitHub, LinkedIn, Portfolio.
+  - Implement dynamic profile completion percentage calculation (`(filledFields / totalFields) * 100`).
+- Update `dashboard.html` and `js/dashboard.js` to display real dynamic data:
+  - Real profile completion meter.
+  - Real resume status and score.
+  - Real applied jobs count and active application status badges.
+  - Real upcoming interviews list.
+  - Personalized recommended jobs based on the student's skills.
+
+### Phase 4: Production Resume Management
+- Refactor resume logic into `backend/controllers/resumeController.js`.
+- Add routes:
+  - `POST /api/resume/upload` (Multer, deletes previous physical file on replace).
+  - `GET /api/resume/myresume` (Fetches metadata + file existence check).
+  - `GET /api/resume/download` (Authenticated secure file download stream).
+  - `DELETE /api/resume/delete` (Deletes DB record and removes physical PDF from `backend/uploads/`).
+- Update `resume.html` and `js/resume.js` with View, Download, Delete, and Replace actions, validation, and real feedback.
+
+### Phase 5: Complete Job System
+- Enhance `models/Job.js` with `companyId`, `eligibility`, `branch`, `deadline`, `status` (`Active`/`Closed`), `applicantsCount`.
+- Add search, filtering (by job type, location, experience), sorting (newest, highest salary), and company-specific endpoints.
+
+### Phase 6: Real Applications & Saved Jobs
+- Create `models/Application.js` and `models/SavedJob.js`.
+- Create `backend/controllers/applicationController.js` and `backend/controllers/savedJobController.js`.
+- Connect `jobs.html` modal to `POST /api/applications/apply`.
+- Create `applications.html` & `js/applications.js` for students to track application status.
+- Add "Save Job" (bookmark) button to job cards and dashboard.
+
+### Phase 7: Company / Recruiter Module
+- Create `company-dashboard.html` and `js/company-dashboard.js`.
+- Features:
+  - Recruiter stats (active jobs, total applicants, shortlisted, interviews scheduled).
+  - Post new job modal/form.
+  - Manage posted jobs (edit, close, delete).
+  - View candidate applications with full profile details.
+  - View and download candidate resumes.
+  - Update candidate status (`Applied` -> `Under Review` -> `Shortlisted` -> `Interview` -> `Selected` -> `Rejected`).
+  - Schedule interview with date, time, round, and meeting link.
+
+### Phase 8: Placement Cell / Admin Module
+- Create `admin-dashboard.html` and `js/admin-dashboard.js`.
+- Features:
+  - Placement metrics: Total students, total companies, total jobs, placement percentage, average CTC.
+  - Student directory with placement status and filters.
+  - Company directory.
+  - Job approval / management.
+  - Placement statistics and reports.
+
+### Phase 9: Notifications & Interview Management
+- Create `models/Notification.js` and `models/Interview.js`.
+- Auto-trigger notifications when:
+  - Student applies for a job -> Company gets notified.
+  - Company updates status or schedules interview -> Student gets notified.
+  - New job is posted -> Relevant students get notified.
+- Implement live notification dropdown/modal in top navigation bar across all pages.
+- Student interview schedule section on dashboard and dedicated interview cards.
+
+### Phase 10 & 11: AI Assistant & AI Resume Analyzer
+- Build `backend/services/aiService.js`:
+  - Connects to Google Gemini API (if `GEMINI_API_KEY` is present in `.env`).
+  - Implements an intelligent, domain-specific placement & interview offline engine (never faking, clearly operating in offline/local AI mode with hundreds of curated technical/HR questions, coding tips, and ATS resume scoring).
+- Build `backend/controllers/aiController.js` and `backend/routes/aiRoutes.js`:
+  - `POST /api/ai/chat`: Interactive conversational assistant for placement prep, DSA, HR interview, and resume tips.
+  - `POST /api/ai/interview-prep`: Role-specific interview questions generator (Frontend, Backend, Full Stack, Data Analyst, Cloud).
+  - `POST /api/ai/analyze-resume`: Extracts skills, calculates ATS readiness score (0-100%), identifies missing keywords, and gives actionable improvements.
+- Create `ai-assistant.html` & `js/ai-assistant.js` + link floating widget on `index.html`.
+
+### Phase 12 & 13: Analytics, Reports & Security Audit
+- Add placement analytics graphs / progress bars on Admin and Recruiter dashboards.
+- Security verification:
+  - JWT secret validation.
+  - Password hashing with bcrypt.
+  - Role-based route authorization.
+  - PDF file extension, mime-type, and size limits (max 5MB).
+  - Sanitization of user input.
+  - Cross-user file access prevention.
+
+### Phase 14 & 15: Responsive UI Polish & Comprehensive Testing
+- Polish UI across all pages using the primary blue palette (`#2563EB`, `#1E40AF`, `#10B981`, `#F8FAFC`).
+- Ensure mobile responsiveness for sidebar, topbar, grids, and modals.
+- End-to-end testing of every role:
+  - Student registration, profile completion, resume upload/download/delete, job search, save, apply, AI chat.
+  - Recruiter registration, job posting, applicant review, status change, interview scheduling.
+  - Admin login, metrics review, user management.
+
+### Phase 16: Deployment Preparation & Presentation Support
+- Document complete API endpoints in `README.md`.
+- Provide clear setup and demo guide for college presentation.
+
+---
+
+## 4. Verification Plan
+
+### Automated / API Tests
+- Test user registration & login (Student, Company, Admin) via curl / Node fetch.
+- Test protected routes without token (expect 401).
+- Test student trying to post job (expect 403 Forbidden).
+- Test resume upload, replace (verify old file unlinked), view, download, delete.
+- Test job creation, search, filter, and real application submission.
+- Test company reviewing applicants and advancing status.
+- Test AI chat and resume analyzer endpoints.
+
+### Manual Verification in Browser
+- Launch server on `http://localhost:5000`.
+- Verify Landing page, navigation, and floating AI chat.
+- Test Student registration -> Dashboard -> Profile edit (verify dynamic completion %) -> Resume upload & download -> Browse & apply to job.
+- Test Company login -> Dashboard -> Post job -> View student application -> Update status to Shortlisted -> Schedule interview.
+- Test Student seeing notification and interview on their dashboard.
+- Test Admin dashboard viewing placement analytics and directories.

@@ -1,0 +1,211 @@
+/* ==========================================
+   LOGIN PAGE
+   Smart Placement Assistant
+========================================== */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:'Inter',sans-serif;
+
+    background:linear-gradient(
+        135deg,
+        #2563EB,
+        #1E40AF
+    );
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    min-height:100vh;
+}
+.login-box{
+
+    width:420px;
+
+    background:#ffffff;
+
+    padding:40px;
+
+    border-radius:18px;
+
+    box-shadow:0 15px 40px rgba(0,0,0,0.15);
+
+}
+.login-box h1{
+
+    text-align:center;
+
+    color:#2563EB;
+
+    margin-bottom:10px;
+
+    font-size:32px;
+
+}
+
+.login-box p{
+
+    text-align:center;
+
+    color:#64748B;
+
+    margin-bottom:30px;
+
+}
+.input-box{
+    display:flex;
+    align-items:center;
+    border:1px solid #D1D5DB;
+    border-radius:10px;
+    padding:12px 15px;
+    margin-bottom:20px;
+}
+
+.input-box i{
+    color:#2563EB;
+    margin-right:10px;
+}
+
+.input-box input{
+    width:100%;
+    border:none;
+    outline:none;
+    font-size:16px;
+    font-family:'Inter',sans-serif;
+}
+.login-btn{
+
+    width:100%;
+
+    padding:15px;
+
+    background:#2563EB;
+
+    color:#ffffff;
+
+    border:none;
+
+    border-radius:10px;
+
+    font-size:18px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:0.3s;
+
+    margin-top:10px;
+
+}
+
+.login-btn:hover{
+
+    background:#1E40AF;
+
+}
+
+
+.register-link{
+    text-align:center;
+    margin-top:20px;
+    font-size:15px;
+    color:#64748B;
+}
+
+.register-link a{
+    color:#2563EB;
+    font-weight:600;
+    text-decoration:none;
+}
+
+.register-link a:hover{
+    text-decoration:underline;
+}
+
+/* ==========================================
+   DEMO BUTTONS & HEADER STYLES
+========================================== */
+.login-logo-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.brand-icon {
+    font-size: 42px;
+    color: #2563EB;
+    margin-bottom: 12px;
+}
+
+.demo-logins-box {
+    background: #EFF6FF;
+    border: 1px solid #BFDBFE;
+    border-radius: 12px;
+    padding: 12px;
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.demo-label {
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    color: #1E40AF;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+}
+
+.demo-btns-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+}
+
+.demo-btn {
+    padding: 8px 6px;
+    font-size: 12px;
+    font-weight: 600;
+    border-radius: 8px;
+    border: 1px solid #CBD5E1;
+    background: #FFFFFF;
+    color: #1E293B;
+    cursor: pointer;
+    transition: 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+
+.demo-btn:hover {
+    background: #2563EB;
+    color: #FFFFFF;
+    border-color: #2563EB;
+}
+
+.back-home-wrap {
+    text-align: center;
+    margin-top: 15px;
+}
+
+.back-home-wrap a {
+    font-size: 13px;
+    color: #64748B;
+    text-decoration: none;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: 0.2s;
+}
+
+.back-home-wrap a:hover {
+    color: #2563EB;
+}

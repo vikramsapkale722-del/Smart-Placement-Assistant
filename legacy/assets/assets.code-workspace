@@ -1,0 +1,25 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../backend"
+		},
+		{
+			"path": "../css"
+		},
+		{
+			"path": "../docs"
+		},
+		{
+			"path": "../fonts"
+		},
+		{
+			"path": "../js"
+		},
+		{
+			"path": "../node_modules"
+		}
+	]
+}

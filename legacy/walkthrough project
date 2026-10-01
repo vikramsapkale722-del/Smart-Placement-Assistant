@@ -1,0 +1,81 @@
+# Walkthrough - Phase 1: Role-Based Authentication
+
+We have implemented Phase 1: **Role-Based Authentication** for the Smart Placement Assistant project across all three roles: **Student**, **Company/Recruiter**, and **Admin**.
+
+---
+
+## 1. Summary of Changes
+
+### Backend Security & Architecture
+- **[User.js](file:///c:/Users/Admin/OneDrive/Desktop/Smart-Placement-Assistant/backend/models/User.js)**:
+  - Validated role enum strictly for `["student", "company", "admin"]`.
+  - Added schema method `matchPassword(enteredPassword)` using bcrypt.
+  - Added `isActive` field with default `true`.
+- **[authMiddleware.js](file:///c:/Users/Admin/OneDrive/Desktop/Smart-Placement-Assistant/backend/middleware/authMiddleware.js)**:
+  - `protect`: Verifies Bearer JWT, resolves user, attaches safe user object without password to `req.user`.
+  - `authorize(...roles)`: Enforces role permissions, returning `403 Forbidden` if user role is not permitted.
+- **[authController.js](file:///c:/Users/Admin/OneDrive/Desktop/Smart-Placement-Assistant/backend/controllers/authController.js)**:
+  - Enforced security on public registration: only `student` and `company` roles can be registered publicly. Admin self-registration is blocked.
+  - Generates JWT containing `{ id, role }` without exposing secrets or credentials.
+- **[db.js](file:///c:/Users/Admin/OneDrive/Desktop/Smart-Placement-Assistant/backend/config/db.js)**:
+  - Added automatic seed check for default demo accounts (`admin@placement.edu`, `recruiter@google.com`, `vedant@student.edu`) upon MongoDB connection, ensuring demo logins work in both Atlas and Memory Store modes.
+
+### Route Protection & Ownership Permissions
+- **[jobRoutes.js](file:///c:/Users/Admin/OneDrive/Desktop/Smart-Placement-Assistant/backend/routes/jobRoutes.js)**:
+  - `POST /api/jobs`: Restricted to `company` and `admin` (`authorize("company", "admin")`). Students receive `403 Forbidden`.
+  - `PUT /api/jobs/:id`: Restricted to `company` and `admin`.
+  - `DELETE /api/jobs/:id`: Restricted to `company` and `admin`.
+  - `GET /api/jobs/company/my-jobs`: Restricted to `company` and `admin`.
+- **[jobController.js](file:///c:/Users/Admin/OneDrive/Desktop/Smart-Placement-Assistant/backend/controllers/jobController.js)**:
+  - Implemented **ownership check** in `updateJob` and `deleteJob`: Company accounts can only update/delete jobs created by their organization (`job.companyId === req.user._id`). Admins can update/delete any job.
+- **[resumeRoutes.js](file:///c:/Users/Admin/OneDrive/Desktop/Smart-Placement-Assistant/backend/routes/resumeRoutes.js)**:
+  - Upload, get resume, and delete resume restricted to `student` and `admin`.
+- **[adminRoutes.js](file:///c:/Users/Admin/OneDrive/Desktop/Smart-Placement-Assistant/backend/routes/adminRoutes.js)**:
+  - Overview and students directory restricted strictly to `admin`.
+- **[companyRoutes.js](file:///c:/Users/Admin/OneDrive/Desktop/Smart-Placement-Assistant/backend/routes/companyRoutes.js)**:
+  - Recruiter statistics restricted to `company` and `admin`.
+- **[savedJobRoutes.js](file:///c:/Users/Admin/OneDrive/Desktop/Smart-Placement-Assistant/backend/routes/savedJobRoutes.js)**:
+  - Saved job toggling and listing restricted to `student` and `admin`.
+
+### Frontend & Dashboards
+- **[js/api.js](file:///c:/Users/Admin/OneDrive/Desktop/Smart-Placement-Assistant/js/api.js)**:
+  - Enhanced `requireAuth(allowedRoles)` with automatic redirection and role notification feedback.
+- **[company-dashboard.html](file:///c:/Users/Admin/OneDrive/Desktop/Smart-Placement-Assistant/company-dashboard.html) & [company-dashboard.js](file:///c:/Users/Admin/OneDrive/Desktop/Smart-Placement-Assistant/js/company-dashboard.js)**:
+  - Created Recruiter Portal protected with `requireAuth(["company", "admin"])`.
+  - Displays recruiter metrics (Active Postings, Total Applicants, Shortlisted, Interviews).
+  - Includes job management table with delete action and modal form to publish new jobs directly via `POST /api/jobs`.
+- **[admin-dashboard.html](file:///c:/Users/Admin/OneDrive/Desktop/Smart-Placement-Assistant/admin-dashboard.html) & [admin-dashboard.js](file:///c:/Users/Admin/OneDrive/Desktop/Smart-Placement-Assistant/js/admin-dashboard.js)**:
+  - Created Admin Portal protected with `requireAuth(["admin"])`.
+  - Displays placement metrics (Registered Students, Company Partners, Active Jobs, Placement Rate).
+  - Includes student directory table.
+- **[login.html](file:///c:/Users/Admin/OneDrive/Desktop/Smart-Placement-Assistant/login.html) & [js/login.js](file:///c:/Users/Admin/OneDrive/Desktop/Smart-Placement-Assistant/js/login.js)**:
+  - One-click demo login buttons for Student, Recruiter, and Admin.
+  - Redirects dynamically to the correct dashboard (`dashboard.html`, `company-dashboard.html`, `admin-dashboard.html`).
+- **[jobs.html](file:///c:/Users/Admin/OneDrive/Desktop/Smart-Placement-Assistant/jobs.html) & [js/jobs.js](file:///c:/Users/Admin/OneDrive/Desktop/Smart-Placement-Assistant/js/jobs.js)**:
+  - Updated dashboard buttons to point to the appropriate role dashboard for logged-in users.
+
+---
+
+## 2. Test Verification Results
+
+We executed the automated RBAC test suite against the running server (`http://localhost:5000`):
+
+| # | Test Description | Expected Result | Actual Result | Status |
+|---|------------------|-----------------|---------------|--------|
+| 1 | Student Login (`vedant@student.edu`) | Token issued, role: `student` | 200 OK, role: `student` | ✅ PASS |
+| 2 | Company Login (`recruiter@google.com`) | Token issued, role: `company` | 200 OK, role: `company` | ✅ PASS |
+| 3 | Admin Login (`admin@placement.edu`) | Token issued, role: `admin` | 200 OK, role: `admin` | ✅ PASS |
+| 4 | Student Attempting to Create Job (`POST /api/jobs`) | Blocked with HTTP 403 Forbidden | 403 Forbidden | ✅ PASS |
+| 5 | Unauthenticated Job Creation (`POST /api/jobs`) | Blocked with HTTP 401 Unauthorized | 401 Unauthorized | ✅ PASS |
+| 6 | Company Creating Job (`POST /api/jobs`) | Created with HTTP 201 | 201 Created | ✅ PASS |
+| 7 | Student Accessing Admin Overview (`GET /api/admin/overview`) | Blocked with HTTP 403 Forbidden | 403 Forbidden | ✅ PASS |
+| 8 | Company Accessing Admin Overview (`GET /api/admin/overview`) | Blocked with HTTP 403 Forbidden | 403 Forbidden | ✅ PASS |
+| 9 | Admin Accessing Admin Overview (`GET /api/admin/overview`) | Authorized with HTTP 200 OK | 200 OK | ✅ PASS |
+| 10 | Student Accessing Recruiter Stats (`GET /api/company/stats`) | Blocked with HTTP 403 Forbidden | 403 Forbidden | ✅ PASS |
+| 11 | Company Accessing Recruiter Stats (`GET /api/company/stats`) | Authorized with HTTP 200 OK | 200 OK | ✅ PASS |
+| 12 | Student Attempting to Update Job (`PUT /api/jobs/:id`) | Blocked with HTTP 403 Forbidden | 403 Forbidden | ✅ PASS |
+| 13 | Admin Updating Job (`PUT /api/jobs/:id`) | Authorized with HTTP 200 OK | 200 OK | ✅ PASS |
+| 14 | Company Deleting Own Job (`DELETE /api/jobs/:id`) | Authorized with HTTP 200 OK | 200 OK | ✅ PASS |
+
+All 14 tests completed with **0 errors**.
+All frontend pages (`/login.html`, `/dashboard.html`, `/company-dashboard.html`, `/admin-dashboard.html`, `/jobs.html`, `/register.html`) return `200 OK`.
